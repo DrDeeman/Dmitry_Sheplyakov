@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="styles.css" rel="stylesheet" type="text/css" />
+  <script src="scripts.js"></script>
+</head>
+
+<body class='body'>
+
+  <div class="layer"></div>
+  <progress value='0' max='100' class="loadbar"></progress>
+  <div class="popup">
+
+    <p class="close"
+      onclick="document.getElementsByClassName('popup')[0].style.display=document.getElementsByClassName('layer')[0].style.display='none';">
+      +</p>
+    <h4>Ваши товары</h4>
+  </div>
+
+  <header class='header'>
+
+    <div class="head">
+      <div class="head__logo">
+        <img src="image/marvel.jpg" width="65px" />
+        <h1 class='h1-logo'><span class="h1-logo__letter">C</span>omics<span class="letter">T</span>rip</h1><img src="image/dc.png"
+          width="50px" />
+      </div>
+
+      <div class="pay-cart">
+        <button onclick="visualCart();">
+          <div class="pay-cart__count-pay">0</div><img src="image/cart.svg" />
+        </button><br>
+      </div>
+
+      <div class="reg">
+        <a href="">Вход</a>/<a href="reg.html">Регистрация</a>
+      </div>
+
+
+    </div>
+  </header>
+
+
+
+
+  <nav width="100%" height="50px" class='nav'>
+    <b>
+      <ul>
+        <li class="point-menu">Главная<img src="image/triangle.png" width="20px" height="20px" />
+          <ul class="point-menu__podmenu">
+            <li>Новости</li>
+            <li>Интересное</li>
+          </ul>
+        </li>
+        <li class="point-menu">Магазин<img src="image/triangle.png" width="20px" height="20px" />
+          <ul class="point-menu__podmenu">
+            <li>Каталог</li>
+            <li>Акции</li>
+          </ul>
+        </li>
+        <li class="point-menu">О нас<img src="image/triangle.png" width="20px" height="20px" />
+          <ul class="point-menu__podmenu">
+            <li>Контакты</li>
+            <li>Справка о сайте</li>
+          </ul>
+        </li>
+      </ul>
+    </b>
+  </nav>
+
+<main>
+  <section>
+    <div class="wrapper-video">
+      <video align="center" autoplay="autoplay" loop="loop" muted="muted">
+        <source src="q.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+      </video>
+    </div>
+  </section>
+  <section>
+
+    <div class="articles">
+      <div class="articles__marq">
+        <marquee behavior="alternate">
+          <h3>Последние новости</h3>
+        </marquee>
+      </div>
+
+      <div class="buttons">
+        <button class="buttons__button-left">
+          <<</button>
+            <button class="buttons__button-right">>></button>
+      </div>
+
+      <div class="news-block"><img class='news-block__image' src="image/avengers.jpg" height="100%" />
+        <div class="news-block__article">
+          <h4>Мстители - финал:конец истории?</h4>
+          <p>Недавно вышел фильм мстители: финал, который был, безусловно ожидаемый, но был принят по разному. Одно
+            нельзя отрицать - фильм продемонстрировал огромный размах мультивселенной. Для большей информации Вы можете
+            прочитать статью о фильме.</p>
+        </div>
+      </div>
+
+      <div class="news-block"><img class='news-block__image' src="image/marvel avengers.jpg" height="100%" />
+        <div class="news-block__article">
+          <h4>Марвел:мстители - игра про баги</h4>
+          <p>Ожидаемая игра по мстителям, наконец, вышла. Но ее оценки были, мягко говоря, не очень. Что же так
+            разгневало критиков?</p>
+        </div>
+      </div>
+
+      <div class="news-block"><img class='news-block__image' src="image/captain America.jpg" height="100%" />
+        <div class="news-block__article">
+          <h4>Новый капитан Америка может появится в Докторе Стрэндж 2</h4>
+          <p>(В статье присутствуют спойлеры) Тех, кто посмотрел мстители: финал, интересует дальнейшая судьба капитана
+            Америки. Планы Марвел на него Вы можете узнать в статье.</p>
+        </div>
+      </div>
+
+      <div class="news-block"><img class='news-block__image' src="image/spider.webp" height="100%" />
+        <div class="news-block__article">
+          <h4>Насколько Ты фанат Паучка?</h4>
+          <p>В новом Человеке-пауке на PS4 оказалось множество отсылок на первые комиксы о супергерое. Проверь себя,
+            нашел ли ты их все?</p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </section>
+
+  <section class="sale">
+
+    <div class="product">
+      <img id="id1" width="100%" height="80%" />
+      <button class="product__pay" onclick="sumWrite(name1)" align="center"><img src="image/cart.svg" width="24px"
+          height="24px" /></button>
+      <div align="center" id="d1">
+
+      </div>
+    </div>
+    <script>const name1 = rand(id1, d1);</script>
+    <div class="product">
+      <img id="id2" width="100%" height="80%" />
+      <button class="product__pay" onclick="sumWrite(name2)" align="center"><img src="image/cart.svg" width="24px"
+          height="24px" /></button>
+      <div align="center" id="d2">
+
+      </div>
+    </div>
+    <script>const name2= rand(id2, d2);</script>
+    <div class="product">
+      <img id="id3" width="100%" height="80%" />
+      <button class="product__pay" onclick="sumWrite(name3)" align="center"><img src="image/cart.svg" width="24px"
+          height="24px" /></button>
+      <div align="center" id="d3">
+
+      </div>
+    </div>
+    <script>const name3 = rand(id3, d3);</script>
+    <div class="product-foot">
+      <h2 class='product-foot__logo-foot'>
+        <font color="white">Акционные предложения</font>
+      </h2><button class="product-foot__more">Узнать больше</button>
+    </div>
+  </section>
+  </main>
+  <footer class="foot">
+    <h3>Позвоните нам!</h3><img src="image/tel.png" width="30px" height="30px" />
+  </footer>
+
+
+
+
+</body>
+
+</html>

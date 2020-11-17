@@ -1,0 +1,144 @@
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+
+fieldset{
+display:flex;
+display:-webkit-flex;
+margin-left:23%;
+margin-top:15%;
+width:50%;
+height:200px;
+border-radius:5px;
+opacity:0;
+}
+fieldset legend{
+display:flex;
+display:-webkit-flex;
+text-align:center;
+justify-content:center;
+width:100%;
+height:25px;
+border:1px solid gray;
+border-radius:5px;
+}
+fieldset form{
+display:flex;
+display:-webkit-flex;
+flex-wrap:wrap;
+opacity:0;
+}
+form div{
+display:flex;
+display:-webkit-flex;
+justify-content: space-between;
+width:100%;
+flex-basis:100%;
+margin:5px;
+}
+.info{
+justify-content:center;
+}
+a{
+position:absolute;
+left:85%;
+top:90%;
+}
+.load{
+margin-top:40px;
+height:5px;
+flex-basis:100%;
+}
+
+
+</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script>
+$().ready(function(){
+$('input[name="nik"]').on('focusout',function(){
+$.ajax({
+url:'scan.php',
+method:'POST',
+data:{
+niks: $('input[name="nik"]').val()
+},
+success:function(data){
+$('.info').html(data);
+}
+});
+});
+
+
+
+
+
+
+
+$(window).on('load',function(){
+$('input').val('');
+$('fieldset').animate({opacity:'1'},5000).promise().done(function(){
+$('form').animate({opacity:'1'},5000).promise().done(function(){
+$('input').prop("disabled",false);
+$('button').prop("disabled",false);
+});
+});
+});
+});
+$(document).ready(function(){
+$('#btn').on('click',function(event){
+let Timer;
+event.preventDefault();
+if($('input[name="name"]').val()=='' || $('input[name="familia"]').val()=='' || $('input[name="nik"]').val()=='')$('.info').html("Заполните все поля"); else
+if($('input[name="name"]').val().match(/[^a-z]/gi)==null && $('input[name="familia"]').val().match(/[^a-z]/gi)==null && $('input[name="nik"]').val().match(/\W/g)==null){
+$.ajax({
+url:'reg.php',
+type:"POST",
+data:$("form").serialize(),
+beforeSend:function(){
+$('button').prop("disabled",true);
+let i=0;
+Timer = setInterval(()=>{
+if($('progress').attr('value')==100)$('progress').attr('value',i=0);else $('progress').attr('value',++i);
+},25);
+},
+complete:function(){
+$('input').val('');
+$('progress').attr('value',0);
+clearInterval(Timer);
+$('button').prop("disabled",false);
+},
+success:function(data){
+$('.info').html(data);
+},
+error:function(){
+alert("Ошибка");
+}
+});
+} else $('.info').html("Данные содержат запрещенные символы. Пожалуйста, введите их снова.");
+});
+});
+</script>
+</head>
+<body>
+<fieldset>
+<legend>Привет! Хочешь зарегестрироваться?</legend>
+<form>
+<div>
+<label for="name">Имя</label><input disabled="disabled"  name="name" type="text" size="30"  />
+</div>
+<div>
+<label for="familia">Фамилия</label><input disabled="disabled" name="familia" type="text"  size="30"/>
+</div>
+<div>
+<label for="nik">Никнейм</label><input disabled="disabled" name="nik" type="text"  size="30"/>
+</div>
+<button disabled="disabled" id="btn">Отправить</button>
+<div class="info"></div>
+<progress max='100' value='0' class="load"></div>
+</form>
+</fieldset>
+
+<a href="ComicTrip.html">Вернуться на главную</a>
+</body>
+</html>
