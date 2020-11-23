@@ -87,7 +87,7 @@ h2 {
 	min-width: 350px;
 }
 
-.point-menu {
+.menu {
 	position: relative;
 	float: left;
 	display: inline;
@@ -96,21 +96,27 @@ h2 {
 	cursor: pointer;
 }
 
- .point-menu__podmenu {
+ .menu__item {
 	position: absolute;
 	display: none;
 }
 
- .point-menu:hover>.point-menu__podmenu {
+ .menu:hover>.menu__item {
 	display: block;
 	margin-left: -50px;
 }
 
- .point-menu:hover>img {
+.menu img{
+	width:20px;
+	height:20px;
+	
+}
+
+ .menu:hover>img {
 	transform: rotate(180deg);
 }
 
- .point-menu:hover>.point-menu__podmenu li {
+ .menu:hover>.menu__item li {
 	list-style-type: none;
 	border: 1px solid black;
 	background-color: transparent;
@@ -133,13 +139,13 @@ h1 {
 
 
 
-.buttons {
+.news-controls {
 	position: absolute;
 	width: 100%;
 	margin-top: 5%;
 }
 
-.buttons button {
+.news-controls button {
 	opacity: 0.5;
 }
 
@@ -245,11 +251,11 @@ h1 {
 	height: 50px;
 }
 
- .buttons__button-left {
+ .news-controls__button-left {
 	left: 0px;
 }
 
-.buttons__button-right {
+.news-controls__button-right {
 	float: right;
 	right: 15px;
 }
@@ -386,7 +392,7 @@ footer h3 {
 	}
 	
 	
-	.point-menu{
+	.menu{
 		font-size:15px;
 		margin-right:20px;
 	}
