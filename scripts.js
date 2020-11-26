@@ -1,4 +1,5 @@
 let summar = 0;
+let outId=0;
 //Данные переменные являются хранилищем индексов карточек и собственно, самих карточек
 const masCard = [
 	{ img: "image/x.jpg", name: "FantasticFour", countFrom: 6, countTo: 4 }, { img: "image/b.jpg", name: "Deadpool", countFrom: 7, countTo: 5 }, { img: "image/c.jpg", name: "Superman", countFrom: 8, countTo: 6 }, { img: "image/v.jpg", name: "Batman", countFrom: 5, countTo: 4 }, { img: "image/z.jpg", name: "spiderman", countFrom: 7, countTo: 4 }
@@ -142,7 +143,32 @@ const visualCart = () => {
 		error => { alert(error); document.getElementsByClassName('layer')[0].style.display = 'none'; load.value = 0; }
 	);
 
-
-
 }
+
+
+function MoveBlock(idBlock){
+	let [...rest]=document.getElementsByClassName('block-sale');
+	let [...buttons]=document.getElementsByClassName('radio');
+	let x;
+     if(outId<=idBlock)x=1;else x=-1;
+	outId=idBlock;
+	let timer;
+	buttons[0].style.pointerEvents=buttons[1].style.pointerEvents=buttons[2].style.pointerEvents='none';
+
+	timer=setInterval(()=>{
+		rest.forEach((ob,i)=>{
+			ob.style.left=`${parseInt(getComputedStyle(ob).left,10)-5*x}px`;
+		});
+		if( (x==1 && rest[idBlock].offsetLeft<=0) || (x==-1 && rest[idBlock].offsetLeft>=0)){ 
+		clearInterval(timer);
+		 buttons[0].style.pointerEvents=buttons[1].style.pointerEvents=buttons[2].style.pointerEvents='auto';
+		}
+
+	
+
+	},10);
+         }
+
+
+
 
