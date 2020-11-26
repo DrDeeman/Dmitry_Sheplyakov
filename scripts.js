@@ -10,28 +10,22 @@ let masIndex = [];
 //хранилище товаров в корзине
 let componentPopup=new Map();
 
-
-(function (window){
-	function Component(object){  
-	this.object = object;
-	this.string;
-	this.col;
-	this.init();
-		this.re_init=function(ob=document.getElementsByClassName(this.object.name)[0].getElementsByTagName('input')[0]){
-		ob.value =this.col;
-		
-	};
-	
-		this.destroy=function(key){
-		document.getElementsByClassName(object.name)[0].parentElement.parentElement.remove();
-		componentPopup.delete(key);
+class Counter{
+	constructor(){
+		this.counter=1;
 	}
-	
-	
+	 getCounter(){
+		return this.counter;
 	}
+	setCounter(value){
+		this.counter+=value;
+	}
+}
 
-	Component.prototype.init=function(){
-		this.col=1;
+	class Component{  
+	constructor(object){
+		this.object = object;
+			this.counterComponent=new Counter();
 		this.string = `<div class='create_div'>
 	  <img src=${this.object.img} height='100%' width='15%'/>
 	  <div class='cart_product'>
@@ -42,14 +36,21 @@ let componentPopup=new Map();
 	  </div><button onclick='deleteProduct(this);'><img src='image/trash.png'</button>
 	  </div>`;
 		document.getElementsByClassName('popup')[0].innerHTML +=this.string;
-
+	}
+	
+		re_init(ob=document.getElementsByClassName(this.object.name)[0].getElementsByTagName('input')[0]){
+		ob.value =this.counterComponent.getCounter();
 	};
+	
+		destroy(key){
+		document.getElementsByClassName(this.object.name)[0].parentElement.parentElement.remove();
+		componentPopup.delete(key);
+	}
+	
+	
+	}
 
-	
-	
-	
-	window.Component = Component;
-})(window);
+
 
 
 
@@ -66,8 +67,8 @@ const deleteProduct = ob => {
 			componentPopup.forEach((value, key) => {//Затем циклом пробегаем по хранилищу корзины, порядок в корзине соответствует пордку в мапе
 
 				if (index == i) {//Если индекс равен индексу дива
-					if (value.col > 1) {//и количество товаров ондого вида больше 1, то просто уменьшаем количество
-						--value.col;
+					if (value.counterComponent.getCounter() > 1) {//и количество товаров ондого вида больше 1, то просто уменьшаем количество
+						value.counterComponent.setCounter(-1);
 				
 						value.re_init(ob.nextElementSibling);
 
@@ -97,7 +98,7 @@ const sumWrite = t => {
 		});
 
 	} else {
-		componentPopup.get(t).col += 1;
+		componentPopup.get(t).counterComponent.setCounter(1);
 
 		componentPopup.get(t).re_init();
 		//document.getElementsByClassName(t)[0].innerHTML = "<b>Количество товара</b>:" + mapCount.get(t).col;
@@ -130,7 +131,7 @@ const visualCart = () => {
 		setTimeout(() => {
 			clearInterval(timerLoadBar);
 			if (summar > 0) resolve("Товары есть"); else reject(new Error("Товаров нет"));
-		}, 10000);
+		}, 0);
 	});
 	promise.finally(
 		() => {
