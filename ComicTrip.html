@@ -9,16 +9,46 @@
 </head>
 
 <body class='body'>
+<div id='cont'></div>
+
+
+<template id="temp-popup">
+<div class="popup">
+<p class="close"
+      onclick="popup.popupId.style.display=document.getElementsByClassName('layer')[0].style.display='none';">
+      +</p>
+    <h4>Ваши товары</h4>
+	</div>
+	</template>
+	
+	<template id='tovar2'>
+	<div class='create_div'>
+	  <img src=${item.img} height='100%' width='15%'/>
+	  <div class='cart_product'>
+	  <p><b>Наименование товара</b>: комикс ${this.object.name}</p><p><b>Цена товара</b>: ${item.countFrom} $</p><p class=${item.name}><b>Количество товара</b>: 
+	  <button onclick='deleteProduct(this);'>-</button>
+	<input type='button' disabled value=${this.col}/>
+	  <button onclick='sumWrite(this.parentElement.className);'>+</button></p>
+	  </div><button onclick='deleteProduct(this);'><img src='image/trash.png'</button>
+	  </div>
+	  </template>
+	  
+	  <template id='tovar'>
+	<div class='create_div'>
+	  <img  height='100%' width='15%'/>
+	  <div class='cart_product'>
+	  <p><b>Наименование товара</b>: комикс </p><p><b>Цена товара</b>:  $</p><p><b>Количество товара</b>: 
+	  <button onclick='deleteProduct(this);'>-</button>
+	<input type='button' disabled />
+	  <button onclick='sumWrite(this.parentElement.className);'>+</button></p>
+	  </div><button onclick='deleteProduct(this);'><img src='image/trash.png'</button>
+	  </div>
+	  </template>
 
   <div class="layer"></div>
   <progress value='0' max='100' class="loadbar"></progress>
-  <div class="popup">
-
-    <p class="close"
-      onclick="document.getElementsByClassName('popup')[0].style.display=document.getElementsByClassName('layer')[0].style.display='none';">
-      +</p>
-    <h4>Ваши товары</h4>
-  </div>
+  
+  
 
   <header class='header'>
 
@@ -30,7 +60,7 @@
       </div>
 
       <div class="pay-cart">
-        <button onclick="visualCart();">
+        <button onclick="createPopup();">
           <div class="pay-cart__count-pay">0</div><img src="image/cart.svg" />
         </button><br>
       </div>

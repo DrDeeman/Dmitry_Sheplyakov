@@ -9,7 +9,13 @@ const max = Math.floor(5);
 let masIndex = [];
 //хранилище товаров в корзине
 let componentPopup=new Map();
+let popup=null;
 
+
+
+function createPopup(){
+	if(popup==null){popup = new Popup(document.getElementById('temp-popup'),document.getElementById('tovar'));popup.visualCart();}else popup.visualCart();
+}
 class Counter{
 	constructor(){
 		this.counter=1;
@@ -26,16 +32,8 @@ class Counter{
 	constructor(object){
 		this.object = object;
 			this.counterComponent=new Counter();
-		this.string = `<div class='create_div'>
-	  <img src=${this.object.img} height='100%' width='15%'/>
-	  <div class='cart_product'>
-	  <p><b>Наименование товара</b>: комикс ${this.object.name}</p><p><b>Цена товара</b>: ${this.object.countFrom} $</p><p class=${this.object.name}><b>Количество товара</b>: 
-	  <button onclick='deleteProduct(this);'>-</button>
-	<input type='button' disabled value=${this.col}/>
-	  <button onclick='sumWrite(this.parentElement.className);'>+</button></p>
-	  </div><button onclick='deleteProduct(this);'><img src='image/trash.png'</button>
-	  </div>`;
-		document.getElementsByClassName('popup')[0].innerHTML +=this.string;
+		
+		//document.getElementsByClassName('popup')[0].innerHTML +=this.string;
 	}
 	
 		re_init(ob=document.getElementsByClassName(this.object.name)[0].getElementsByTagName('input')[0]){
@@ -50,9 +48,57 @@ class Counter{
 	
 	}
 
+class Tovar{
+	constructor(object){
+     this.object=object;
+	}
+}
 
+class Popup{
+	constructor(template,tempStroke){
+		this.tempPopup = document.importNode(template.content,true);	
+		document.getElementById('cont').appendChild(this.tempPopup.cloneNode(true));
+		this.popupId= document.getElementsByClassName('popup')[0];
+		this.string = document.importNode(tempStroke.content,true);
+		//this.popupId.appendChild(this.string.cloneNode(true));
+	}
+	
+	render(){
+		componentPopup.forEach((item)=>{
 
+			this.popupId.appendChild(this.string.cloneNode(true));
+		});
+	}
+	 visualCart(){
 
+	document.getElementsByClassName('layer')[0].style.display = document.getElementsByClassName('loadbar')[0].style.display = 'block';
+	let [load] = document.getElementsByClassName('loadbar');
+	let timer = 0;
+	let timerLoadBar = setInterval(() => {
+		if (load.value === load.max) load.value = 10;
+		else load.value++;
+		timer += 50;
+	}, 50);
+	let promise = new Promise((resolve, reject) => {
+		setTimeout(() => {
+			clearInterval(timerLoadBar);
+			if (summar > 0) resolve("Товары есть"); else reject(new Error("Товаров нет"));
+		}, 0);
+	});
+	promise.finally(
+		() => {
+			load.style.display = 'none';
+			load.value = 0;
+		}
+	)
+	promise.then(
+		result => { this.popupId.style.display = 'block'; this.render();},
+		error => { this.popupId.style.display=document.getElementsByClassName('layer')[0].style.display = 'none';  alert(error); load.value = 0; }
+	);
+
+}
+}
+		
 
 
 
@@ -92,7 +138,7 @@ const sumWrite = t => {
 			if (t == item.name) {
 				
 
-	        componentPopup.set(t,new Component(item));
+	        componentPopup.set(t,new Tovar(item));
 
 			}
 		});
@@ -118,33 +164,7 @@ const rand =(id, dId)=> {
 
 }
 
-const visualCart = () => {
-	document.getElementsByClassName('layer')[0].style.display = document.getElementsByClassName('loadbar')[0].style.display = 'block';
-	let [load] = document.getElementsByClassName('loadbar');
-	let timer = 0;
-	let timerLoadBar = setInterval(() => {
-		if (load.value === load.max) load.value = 10;
-		else load.value++;
-		timer += 50;
-	}, 50);
-	let promise = new Promise((resolve, reject) => {
-		setTimeout(() => {
-			clearInterval(timerLoadBar);
-			if (summar > 0) resolve("Товары есть"); else reject(new Error("Товаров нет"));
-		}, 0);
-	});
-	promise.finally(
-		() => {
-			load.style.display = 'none';
-			load.value = 0;
-		}
-	)
-	promise.then(
-		result => document.getElementsByClassName('popup')[0].style.display = 'block',
-		error => { alert(error); document.getElementsByClassName('layer')[0].style.display = 'none'; load.value = 0; }
-	);
 
-}
 
 
 function MoveBlock(idBlock){
