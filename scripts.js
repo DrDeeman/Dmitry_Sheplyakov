@@ -1,4 +1,4 @@
-let summar = 0;
+
 let outId=0;
 //Данные переменные являются хранилищем индексов карточек и собственно, самих карточек
 const masCard = [
@@ -14,45 +14,48 @@ let popup=null;
 
 
 function createPopup(){
-	if(popup==null){popup = new Popup(document.getElementById('temp-popup'),document.getElementById('tovar'));popup.visualCart();}else popup.visualCart();
+popup = new Popup(document.getElementById('temp-popup'),document.getElementById('tovar'));
+}
+
+function closePopup(){
+	popup.popupId.style.display=document.getElementsByClassName('layer')[0].style.display='none';
 }
 class Counter{
 	constructor(){
-		this.counter=1;
+		this.counter=0;
 	}
 	 getCounter(){
 		return this.counter;
 	}
 	setCounter(value){
 		this.counter+=value;
+		document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML=this.counter;
 	}
 }
-
-	class Component{  
-	constructor(object){
-		this.object = object;
-			this.counterComponent=new Counter();
-		
-		//document.getElementsByClassName('popup')[0].innerHTML +=this.string;
-	}
-	
-		re_init(ob=document.getElementsByClassName(this.object.name)[0].getElementsByTagName('input')[0]){
-		ob.value =this.counterComponent.getCounter();
-	};
-	
-		destroy(key){
-		document.getElementsByClassName(this.object.name)[0].parentElement.parentElement.remove();
-		componentPopup.delete(key);
-	}
-	
-	
-	}
-
+let count = new Counter();
 class Tovar{
 	constructor(object){
      this.object=object;
+	 this.col=1;
+	 count.setCounter(this.col);
+	}
+	
+	reCol(newCol){
+		this.col+=newCol;
+
+		if(this.col!=0 ){
+			if(popup.popupId.getElementsByClassName(this.object.name)[0]!= undefined)popup.popupId.getElementsByClassName(this.object.name)[0].querySelectorAll('button')[1].innerHTML=this.col;
+		}
+	     else{
+			 popup.popupId.getElementsByClassName(this.object.name)[0].parentElement.parentElement.remove();
+			 componentPopup.delete(this.object.name);
+		 }
+		
+		 			count.setCounter(newCol);
 	}
 }
+
+
 
 class Popup{
 	constructor(template,tempStroke){
@@ -60,13 +63,24 @@ class Popup{
 		document.getElementById('cont').appendChild(this.tempPopup.cloneNode(true));
 		this.popupId= document.getElementsByClassName('popup')[0];
 		this.string = document.importNode(tempStroke.content,true);
-		//this.popupId.appendChild(this.string.cloneNode(true));
 	}
 	
 	render(){
-		componentPopup.forEach((item)=>{
-
-			this.popupId.appendChild(this.string.cloneNode(true));
+		
+		componentPopup.forEach((item,i)=>{
+			if(popup.popupId.getElementsByClassName(i).length==0){
+            this.string.querySelector('img').src=item.object.img;
+		    let [...rest] = this.string.querySelectorAll('p');
+			rest[0].innerHTML='<b>Наименование товара:</b> комикс '+item.object.name;
+			rest[1].innerHTML='<b>Цена товара</b>: '+item.object.countFrom+' $';
+			rest[2].classList.remove(rest[2].classList.item(0));
+			rest[2].classList.add(item.object.name);
+			let [...rest2] = this.string.querySelectorAll('button');
+			rest2[1].innerHTML = item.col;
+			let b = this.popupId.appendChild(this.string.cloneNode(true));
+			}; 
+			
+			
 		});
 	}
 	 visualCart(){
@@ -82,7 +96,7 @@ class Popup{
 	let promise = new Promise((resolve, reject) => {
 		setTimeout(() => {
 			clearInterval(timerLoadBar);
-			if (summar > 0) resolve("Товары есть"); else reject(new Error("Товаров нет"));
+			if (count.getCounter() > 0) resolve("Товары есть"); else reject(new Error("Товаров нет"));
 		}, 0);
 	});
 	promise.finally(
@@ -102,52 +116,20 @@ class Popup{
 
 
 
-
-const deleteProduct = ob => {
-	//document.getElementsByClassName['popup'].getElementsByTageName('div')
-	const [t] = document.getElementsByClassName('popup');
-	for (let i in t.children) {
-		if (ob.parentElement.parentElement.parentElement == t.children[i]) {//Здесь получаю массив дивов в попапе для обнаружения, в каком диве была нажата кнопка
-			//Если родительский див равен диву в массиве, то
-			let index = 2;                    //индекс равен 2, т.к. не учитываем крестик выхода из попапа и заголовок
-			componentPopup.forEach((value, key) => {//Затем циклом пробегаем по хранилищу корзины, порядок в корзине соответствует пордку в мапе
-
-				if (index == i) {//Если индекс равен индексу дива
-					if (value.counterComponent.getCounter() > 1) {//и количество товаров ондого вида больше 1, то просто уменьшаем количество
-						value.counterComponent.setCounter(-1);
-				
-						value.re_init(ob.nextElementSibling);
-
-					} else {
-						componentPopup.get(key).destroy(key);
-					};
-				};
-				index++;
-			});
-		};
-
-	};		//ob.parentElement.remove(); 
-	summar--;
-	document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML = summar;
-}
 //Эта функция отвечает за динамическое добавление товара в корзину
 const sumWrite = t => {
-	document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML = ++summar;
+	//document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML = ++summar;
 	if (!componentPopup.has(t)) {//Если имя рандомной карточки не соответствует ключу в мапе, то
 		masCard.forEach((item) => {//Добавляем товар извлекая его из общего набора
 			if (t == item.name) {
 				
-
 	        componentPopup.set(t,new Tovar(item));
-
+           
 			}
 		});
 
 	} else {
-		componentPopup.get(t).counterComponent.setCounter(1);
-
-		componentPopup.get(t).re_init();
-		//document.getElementsByClassName(t)[0].innerHTML = "<b>Количество товара</b>:" + mapCount.get(t).col;
+		componentPopup.get(t).reCol(1);
 	}
 }
 

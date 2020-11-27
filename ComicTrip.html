@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="styles.css" rel="stylesheet" type="text/css" />
   <script src="scripts.js"></script>
+
 </head>
 
 <body class='body'>
@@ -15,32 +16,22 @@
 <template id="temp-popup">
 <div class="popup">
 <p class="close"
-      onclick="popup.popupId.style.display=document.getElementsByClassName('layer')[0].style.display='none';">
+      onclick="closePopup();">
       +</p>
     <h4>Ваши товары</h4>
 	</div>
 	</template>
 	
-	<template id='tovar2'>
-	<div class='create_div'>
-	  <img src=${item.img} height='100%' width='15%'/>
-	  <div class='cart_product'>
-	  <p><b>Наименование товара</b>: комикс ${this.object.name}</p><p><b>Цена товара</b>: ${item.countFrom} $</p><p class=${item.name}><b>Количество товара</b>: 
-	  <button onclick='deleteProduct(this);'>-</button>
-	<input type='button' disabled value=${this.col}/>
-	  <button onclick='sumWrite(this.parentElement.className);'>+</button></p>
-	  </div><button onclick='deleteProduct(this);'><img src='image/trash.png'</button>
-	  </div>
-	  </template>
+
 	  
 	  <template id='tovar'>
-	<div class='create_div'>
-	  <img  height='100%' width='15%'/>
+	<div class='create_div' onclick='event.stopPropagation();  componentPopup.get(String(event.target.parentElement.classList)).reCol(Number(event.target.id));'>
+	  <img  id='image' height='100%' width='15%'/>
 	  <div class='cart_product'>
-	  <p><b>Наименование товара</b>: комикс </p><p><b>Цена товара</b>:  $</p><p><b>Количество товара</b>: 
-	  <button onclick='deleteProduct(this);'>-</button>
-	<input type='button' disabled />
-	  <button onclick='sumWrite(this.parentElement.className);'>+</button></p>
+	  <p> </p><p></p><p><b>Количество товара</b>: 
+	  <button id='-1'>-</button>
+	<button  disabled ></button>
+	  <button id='1'>+</button></p>
 	  </div><button onclick='deleteProduct(this);'><img src='image/trash.png'</button>
 	  </div>
 	  </template>
@@ -60,11 +51,11 @@
       </div>
 
       <div class="pay-cart">
-        <button onclick="createPopup();">
+        <button onclick="popup.visualCart();">
           <div class="pay-cart__count-pay">0</div><img src="image/cart.svg" />
         </button><br>
       </div>
-
+  <script> createPopup();</script>
       <div class="reg">
         <a href="">Вход</a>/<a href="reg.html">Регистрация</a>
       </div>
@@ -169,7 +160,7 @@
   <div class="block-sale">
     <div class="product">
       <img id="id1" width="100%" height="80%" />
-      <button class="product__pay" onclick="sumWrite(name1)" align="center"><img src="image/cart.svg" width="24px"
+      <button class="product__pay" onclick="sumWrite(name1);" align="center"><img src="image/cart.svg" width="24px"
           height="24px" /></button>
       <div align="center" id="d1">
 
@@ -178,7 +169,7 @@
     <script>const name1 = rand(id1, d1);</script>
     <div class="product">
       <img id="id2" width="100%" height="80%" />
-      <button class="product__pay" onclick="sumWrite(name2)" align="center"><img src="image/cart.svg" width="24px"
+      <button class="product__pay" onclick="sumWrite(name2);" align="center"><img src="image/cart.svg" width="24px"
           height="24px" /></button>
       <div align="center" id="d2">
 
@@ -187,7 +178,7 @@
     <script>const name2= rand(id2, d2);</script>
     <div class="product">
       <img id="id3" width="100%" height="80%" />
-      <button class="product__pay" onclick="sumWrite(name3)" align="center"><img src="image/cart.svg" width="24px"
+      <button class="product__pay" onclick="sumWrite(name3);" align="center"><img src="image/cart.svg" width="24px"
           height="24px" /></button>
       <div align="center" id="d3">
 
