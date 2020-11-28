@@ -25,14 +25,16 @@
 
 	  
 	  <template id='tovar'>
-	<div class='create_div' onclick='event.stopPropagation();  componentPopup.get(String(event.target.parentElement.classList)).reCol(Number(event.target.id));'>
+	<div class='create_div' onclick='event.stopPropagation(); popup.addEvent(String(event.target.parentElement.classList),event.target.id); '>
 	  <img  id='image' height='100%' width='15%'/>
 	  <div class='cart_product'>
 	  <p> </p><p></p><p><b>Количество товара</b>: 
 	  <button id='-1'>-</button>
 	<button  disabled ></button>
-	  <button id='1'>+</button></p>
-	  </div><button onclick='deleteProduct(this);'><img src='image/trash.png'</button>
+	  <button id='1'>+</button>
+	  <button  id = 'trash'><img src='image/trash.png'</button>
+	  </p>
+	  </div>
 	  </div>
 	  </template>
 
@@ -160,7 +162,7 @@
   <div class="block-sale">
     <div class="product">
       <img id="id1" width="100%" height="80%" />
-      <button class="product__pay" onclick="sumWrite(name1);" align="center"><img src="image/cart.svg" width="24px"
+      <button class="product__pay" onclick="popup.sumWrite(name1);" align="center"><img src="image/cart.svg" width="24px"
           height="24px" /></button>
       <div align="center" id="d1">
 
@@ -169,7 +171,7 @@
     <script>const name1 = rand(id1, d1);</script>
     <div class="product">
       <img id="id2" width="100%" height="80%" />
-      <button class="product__pay" onclick="sumWrite(name2);" align="center"><img src="image/cart.svg" width="24px"
+      <button class="product__pay" onclick="popup.sumWrite(name2);" align="center"><img src="image/cart.svg" width="24px"
           height="24px" /></button>
       <div align="center" id="d2">
 
@@ -178,7 +180,7 @@
     <script>const name2= rand(id2, d2);</script>
     <div class="product">
       <img id="id3" width="100%" height="80%" />
-      <button class="product__pay" onclick="sumWrite(name3);" align="center"><img src="image/cart.svg" width="24px"
+      <button class="product__pay" onclick="popup.sumWrite(name3);" align="center"><img src="image/cart.svg" width="24px"
           height="24px" /></button>
       <div align="center" id="d3">
 

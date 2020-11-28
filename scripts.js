@@ -22,36 +22,35 @@ function closePopup(){
 }
 class Counter{
 	constructor(){
-		this.counter=0;
+		this.counter=1;
 	}
 	 getCounter(){
 		return this.counter;
 	}
 	setCounter(value){
 		this.counter+=value;
-		document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML=this.counter;
 	}
 }
 let count = new Counter();
-class Tovar{
+class Card{
 	constructor(object){
      this.object=object;
-	 this.col=1;
+	 this.col=new Counter();
 	 count.setCounter(this.col);
 	}
 	
-	reCol(newCol){
-		this.col+=newCol;
+	colAdd(col){
+		this.col.setCounter(col);
 
-		if(this.col!=0 ){
-			if(popup.popupId.getElementsByClassName(this.object.name)[0]!= undefined)popup.popupId.getElementsByClassName(this.object.name)[0].querySelectorAll('button')[1].innerHTML=this.col;
+		if(this.col.getCounter()!=0 ){
+			popup.reInit(this.object.name,this.col.getCounter());
+			
 		}
 	     else{
-			 popup.popupId.getElementsByClassName(this.object.name)[0].parentElement.parentElement.remove();
-			 componentPopup.delete(this.object.name);
+			 popup.deleteCard(this.object.name);
 		 }
 		
-		 			count.setCounter(newCol);
+		 			
 	}
 }
 
@@ -65,6 +64,30 @@ class Popup{
 		this.string = document.importNode(tempStroke.content,true);
 	}
 	
+	
+	deleteCard(name){
+
+		if(componentPopup.get(name).col.getCounter()!=0)document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML=Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent)-componentPopup.get(name).col.getCounter();
+		 popup.popupId.getElementsByClassName(name)[0].parentElement.parentElement.remove();
+			 componentPopup.delete(name);
+	}
+	
+	reInit(name,number){
+		if(popup.popupId.getElementsByClassName(name)[0]!= undefined)popup.popupId.getElementsByClassName(name)[0].querySelectorAll('button')[1].innerHTML=number;
+	}
+	
+	
+	retAllCount(){
+			return Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent);
+	}
+	addEvent(string,targetId){
+		if(targetId==='trash')popup.deleteCard(string); else{
+		componentPopup.get(string).colAdd(Number(targetId));
+		
+			document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML=Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent)+Number(targetId);
+		}
+	}
+	
 	render(){
 		
 		componentPopup.forEach((item,i)=>{
@@ -76,7 +99,7 @@ class Popup{
 			rest[2].classList.remove(rest[2].classList.item(0));
 			rest[2].classList.add(item.object.name);
 			let [...rest2] = this.string.querySelectorAll('button');
-			rest2[1].innerHTML = item.col;
+			rest2[1].innerHTML = item.col.getCounter();
 			let b = this.popupId.appendChild(this.string.cloneNode(true));
 			}; 
 			
@@ -96,7 +119,7 @@ class Popup{
 	let promise = new Promise((resolve, reject) => {
 		setTimeout(() => {
 			clearInterval(timerLoadBar);
-			if (count.getCounter() > 0) resolve("Товары есть"); else reject(new Error("Товаров нет"));
+			if (this.retAllCount() > 0) resolve("Товары есть"); else reject(new Error("Товаров нет"));
 		}, 0);
 	});
 	promise.finally(
@@ -111,27 +134,31 @@ class Popup{
 	);
 
 }
-}
-		
 
 
 
-//Эта функция отвечает за динамическое добавление товара в корзину
-const sumWrite = t => {
+ sumWrite(t){
 	//document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML = ++summar;
 	if (!componentPopup.has(t)) {//Если имя рандомной карточки не соответствует ключу в мапе, то
 		masCard.forEach((item) => {//Добавляем товар извлекая его из общего набора
 			if (t == item.name) {
-				
-	        componentPopup.set(t,new Tovar(item));
+			
+	        componentPopup.set(t,new Card(item));
            
 			}
 		});
 
 	} else {
-		componentPopup.get(t).reCol(1);
+		componentPopup.get(t).colAdd(1);
 	}
+		 document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML= Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent)+1;
 }
+}
+		
+
+
+
+
 
 
 //Эта функция отвечает за рандомную генерацию товара из списка
