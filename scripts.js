@@ -42,13 +42,6 @@ class Card{
 	colAdd(col){
 		this.col.setCounter(col);
 
-		if(this.col.getCounter()!=0 ){
-			popup.reInit(this.object.name,this.col.getCounter());
-			
-		}
-	     else{
-			 popup.deleteCard(this.object.name);
-		 }
 		
 		 			
 	}
@@ -66,7 +59,6 @@ class Popup{
 	
 	
 	deleteCard(name){
-
 		if(componentPopup.get(name).col.getCounter()!=0)document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML=Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent)-componentPopup.get(name).col.getCounter();
 		 popup.popupId.getElementsByClassName(name)[0].parentElement.parentElement.remove();
 			 componentPopup.delete(name);
@@ -80,9 +72,21 @@ class Popup{
 	retAllCount(){
 			return Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent);
 	}
-	addEvent(string,targetId){
-		if(targetId==='trash')popup.deleteCard(string); else{
+	
+	reInit2(string,targetId){
 		componentPopup.get(string).colAdd(Number(targetId));
+		if(componentPopup.get(string).col.getCounter()!=0 ){
+			popup.reInit(componentPopup.get(string).object.name,componentPopup.get(string).col.getCounter());
+			
+		}
+	     else{
+			 popup.deleteCard(componentPopup.get(string).object.name);
+		 }
+	}
+	addEvent(string,targetId){
+		if(Number(targetId)==2)popup.deleteCard(string); else{
+		
+		popup.reInit2(string,targetId);
 		
 			document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML=Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent)+Number(targetId);
 		}
@@ -142,14 +146,14 @@ class Popup{
 	if (!componentPopup.has(t)) {//Если имя рандомной карточки не соответствует ключу в мапе, то
 		masCard.forEach((item) => {//Добавляем товар извлекая его из общего набора
 			if (t == item.name) {
-			
+
 	        componentPopup.set(t,new Card(item));
            
 			}
 		});
 
 	} else {
-		componentPopup.get(t).colAdd(1);
+		popup.reInit2(t,1);
 	}
 		 document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML= Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent)+1;
 }
