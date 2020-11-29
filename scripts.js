@@ -10,6 +10,7 @@ let masIndex = [];
 //хранилище товаров в корзине
 let componentPopup=new Map();
 let popup=null;
+let flash=false;
 
 
 
@@ -23,27 +24,26 @@ function closePopup(){
 class Counter{
 	constructor(){
 		this.counter=1;
+		document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML=Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent)+1;
 	}
 	 getCounter(){
 		return this.counter;
 	}
-	setCounter(value){
+	setCounter(value,name){
 		this.counter+=value;
+     if(document.getElementsByClassName(name)[0]!=null)document.getElementsByClassName(name)[0].querySelectorAll('button')[1].innerHTML=this.counter;
+	 document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML=Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent)+value;
+	 	
 	}
 }
-let count = new Counter();
 class Card{
 	constructor(object){
      this.object=object;
 	 this.col=new Counter();
-	 count.setCounter(this.col);
 	}
 	
 	colAdd(col){
-		this.col.setCounter(col);
-
-		
-		 			
+		this.col.setCounter(col,this.object.name);	 			
 	}
 }
 
@@ -59,37 +59,17 @@ class Popup{
 	
 	
 	deleteCard(name){
-		if(componentPopup.get(name).col.getCounter()!=0)document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML=Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent)-componentPopup.get(name).col.getCounter();
+	document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML=Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent)-componentPopup.get(name).col.getCounter();
 		 popup.popupId.getElementsByClassName(name)[0].parentElement.parentElement.remove();
 			 componentPopup.delete(name);
 	}
 	
-	reInit(name,number){
-		if(popup.popupId.getElementsByClassName(name)[0]!= undefined)popup.popupId.getElementsByClassName(name)[0].querySelectorAll('button')[1].innerHTML=number;
-	}
+
 	
-	
-	retAllCount(){
-			return Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent);
-	}
-	
-	reInit2(string,targetId){
-		componentPopup.get(string).colAdd(Number(targetId));
-		if(componentPopup.get(string).col.getCounter()!=0 ){
-			popup.reInit(componentPopup.get(string).object.name,componentPopup.get(string).col.getCounter());
-			
-		}
-	     else{
-			 popup.deleteCard(componentPopup.get(string).object.name);
-		 }
-	}
 	addEvent(string,targetId){
-		if(Number(targetId)==2)popup.deleteCard(string); else{
-		
-		popup.reInit2(string,targetId);
-		
-			document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML=Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent)+Number(targetId);
-		}
+		if(Number(targetId)===2)this.deleteCard(string); else componentPopup.get(string).colAdd(Number(targetId));	
+		if(componentPopup.get(string)!=undefined && componentPopup.get(string).col.getCounter()==0)this.deleteCard(string);
+	
 	}
 	
 	render(){
@@ -105,10 +85,11 @@ class Popup{
 			let [...rest2] = this.string.querySelectorAll('button');
 			rest2[1].innerHTML = item.col.getCounter();
 			let b = this.popupId.appendChild(this.string.cloneNode(true));
-			}; 
+			} else document.getElementsByClassName(i)[0].querySelectorAll('button')[1].innerHTML=item.col.getCounter();
 			
 			
 		});
+		
 	}
 	 visualCart(){
 
@@ -123,7 +104,7 @@ class Popup{
 	let promise = new Promise((resolve, reject) => {
 		setTimeout(() => {
 			clearInterval(timerLoadBar);
-			if (this.retAllCount() > 0) resolve("Товары есть"); else reject(new Error("Товаров нет"));
+			if (Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent) > 0) resolve("Товары есть"); else reject(new Error("Товаров нет"));
 		}, 0);
 	});
 	promise.finally(
@@ -133,7 +114,7 @@ class Popup{
 		}
 	)
 	promise.then(
-		result => { this.popupId.style.display = 'block'; this.render();},
+		result => { this.popupId.style.display = 'block'; popup.flash=true; this.render();},
 		error => { this.popupId.style.display=document.getElementsByClassName('layer')[0].style.display = 'none';  alert(error); load.value = 0; }
 	);
 
@@ -146,16 +127,16 @@ class Popup{
 	if (!componentPopup.has(t)) {//Если имя рандомной карточки не соответствует ключу в мапе, то
 		masCard.forEach((item) => {//Добавляем товар извлекая его из общего набора
 			if (t == item.name) {
-
+			
 	        componentPopup.set(t,new Card(item));
            
 			}
 		});
 
 	} else {
-		popup.reInit2(t,1);
+		popup.addEvent(t,1);
 	}
-		 document.getElementsByClassName("pay-cart__count-pay")[0].innerHTML= Number(document.getElementsByClassName("pay-cart__count-pay")[0].textContent)+1;
+		 
 }
 }
 		

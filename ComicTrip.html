@@ -25,14 +25,14 @@
 
 	  
 	  <template id='tovar'>
-	<div class='create_div' onclick='event.stopPropagation(); popup.addEvent(String(event.target.parentElement.classList),event.target.id); '>
+	<div class='create_div' onclick='event.stopPropagation(); if(event.target.nodeName=="BUTTON")popup.addEvent(String(event.target.parentElement.classList),event.target.id); '>
 	  <img  id='image' height='100%' width='15%'/>
 	  <div class='cart_product'>
 	  <p> </p><p></p><p><b>Количество товара</b>: 
 	  <button id='-1'>-</button>
 	<button  disabled ></button>
 	  <button id='1'>+</button>
-	  <button  id = '2'><img src='image/trash.png'</button>
+	  <button  id ='2'><img src='image/trash.png' style='pointer-events:none;'></button>
 	  </p>
 	  </div>
 	  </div>
