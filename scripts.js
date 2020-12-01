@@ -84,8 +84,8 @@ class Popup{
 	}
 	
 	render(){
-		let ukaz = masCount(['Deadpool','Batman']);
-		ukaz(0.5);
+		 masCount(['Deadpool','Batman'])(0.5);
+		
 		componentPopup.forEach((item,i)=>{
 			if(popup.popupNode.getElementsByClassName(i).length==0){
             this.popupImportNode.querySelector('img').src=item.object.img;
