@@ -13,14 +13,21 @@ let popup=null;
 let flash=false;
 
 
-function masCount([...rest]=null){
-	return function discount(count){
-		rest.forEach((ob,i)=>{
-		if(componentPopup.has(ob)){
-			
-			componentPopup.get(ob).object.countTo=componentPopup.get(ob).object.countFrom-(componentPopup.get(ob).object.countFrom*count);
-		}
+function getCountingFromProduct(mas){
+	return (count)=>{
+		return (masProductCount)=>{
+			let masProduct=[];
+		mas.forEach((ob,i)=>{
+			let obj={};
+			if(masProductCount.indexOf(i)!=-1 && count>0){
+			 obj.countTo=ob.object.countFrom-(ob.object.countFrom*count);
+			}
+			masProduct.push(Object.assign(ob,obj));
+		
 		});
+		return masProduct;
+		
+	}
 	}
 }
 
@@ -30,6 +37,10 @@ popup = new Popup(document.getElementById('temp-popup'),document.getElementById(
 
 function closePopup(){
 	popup.popupNode.style.display=document.getElementsByClassName('layer')[0].style.display='none';
+	for(let i=2+componentPopup.length;i>2;i--){
+		alert("sds");
+		popup.childNodes[i].remove;
+	}
 }
 class Counter{
 	constructor(template){
@@ -84,14 +95,15 @@ class Popup{
 	}
 	
 	render(){
-		 masCount(['Deadpool','Batman'])(0.5);
+		 let func = getCountingFromProduct(componentPopup);
+		 let mas = func(0.5)(['Batman','Superman']);
 		
-		componentPopup.forEach((item,i)=>{
-			if(popup.popupNode.getElementsByClassName(i).length==0){
+		mas.forEach((item,i)=>{
+			if(popup.popupNode.getElementsByClassName(item.object.name).length==0){
             this.popupImportNode.querySelector('img').src=item.object.img;
 		    let [...rest] = this.popupImportNode.querySelectorAll('p');
 			rest[0].innerHTML='<b>Наименование товара:</b> комикс '+item.object.name;
-			if(item.object.hasOwnProperty('countTo')) rest[1].innerHTML='<b>Цена товара со скидкой</b>: '+item.object.countTo+' $'
+			if(item.hasOwnProperty('countTo')) rest[1].innerHTML='<b>Цена товара со скидкой</b>: '+item.countTo+' $'
 		    else 
 			rest[1].innerHTML='<b>Цена товара</b>: '+item.object.countFrom+' $';
 			
@@ -103,8 +115,8 @@ class Popup{
 			let[...rest2] = item.col.templateCounter.querySelectorAll('button');
 			rest2[1].innerHTML = item.col.getCounter();
 			let b = this.popupNode.appendChild(this.popupImportNode.cloneNode(true));
-			document.getElementsByClassName(i)[0].appendChild(item.col.templateCounter.cloneNode(true));
-			} else document.getElementsByClassName(i)[0].querySelectorAll('button')[1].innerHTML=item.col.getCounter();
+			document.getElementsByClassName(item.object.name)[0].appendChild(item.col.templateCounter.cloneNode(true));
+			} else document.getElementsByClassName(item.object.name)[0].querySelectorAll('button')[1].innerHTML=item.col.getCounter();
 			
 			
 		});
